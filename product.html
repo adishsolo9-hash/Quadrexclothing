@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heavyweight Hoodie — Black | QUADREX</title>
+<meta name="description" content="450 GSM heavyweight French terry hoodie in a drop-shoulder oversized fit. Part of QUADREX Drop 001.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .pdp{ padding:150px 0 0; }
+  .pdp-grid{ display:grid; grid-template-columns:1fr 1fr; gap:64px; padding-bottom:100px; }
+  .pdp-gallery{ display:flex; gap:16px; position:sticky; top:110px; align-self:start; }
+  .gallery-thumbs{ display:flex; flex-direction:column; gap:10px; width:76px; flex-shrink:0; }
+  .gallery-thumb{ aspect-ratio:4/5; background:var(--stone); cursor:pointer; border:1px solid transparent; transition:border-color var(--dur-s); overflow:hidden; position:relative; }
+  .gallery-thumb .plate{ position:absolute; inset:0; }
+  .gallery-thumb.active{ border-color:var(--black); }
+  .gallery-main{ flex:1; aspect-ratio:4/5; position:relative; overflow:hidden; background:#111; cursor:zoom-in; }
+  .gallery-main .plate{ position:absolute; inset:0; transition:background var(--dur-m) var(--ease), transform .6s var(--ease); }
+  .gallery-main:hover .plate{ transform:scale(1.15); }
+  .gallery-main .q-ghost{ position:absolute; font-family:var(--font-head); font-weight:700; font-size:260px; color:rgba(255,255,255,.06); bottom:-40px; right:-30px; line-height:.8; }
+
+  .pdp-info{ max-width:460px; }
+  .pdp-info .breadcrumb{ font-size:11px; color:var(--grey); letter-spacing:.08em; text-transform:uppercase; margin-bottom:18px; display:block;}
+  .pdp-info h1{ font-size:clamp(28px,3.4vw,38px); line-height:1.08; }
+  .pdp-price{ font-size:20px; margin-top:14px; font-weight:600; }
+  .pdp-reviews-link{ display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:var(--grey); }
+  .stars{ color:var(--accent); letter-spacing:2px; font-size:13px; }
+
+  .pdp-section{ padding:28px 0; border-top:1px solid var(--line); }
+  .pdp-section h4{ font-size:11px; letter-spacing:.14em; margin-bottom:16px; font-weight:600; text-transform:uppercase; }
+
+  .size-guide-link{ font-size:11px; text-decoration:underline; color:var(--grey); float:right; text-transform:none; letter-spacing:0; font-weight:400; }
+  .size-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .size-option{
+    width:52px; height:44px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    font-size:12px; letter-spacing:.04em; transition:all var(--dur-s) var(--ease);
+  }
+  .size-option:hover{ border-color:var(--black); }
+  .size-option.active{ background:var(--black); color:var(--warm-white); border-color:var(--black); }
+  .size-option.disabled{ color:var(--line); position:relative; cursor:not-allowed; }
+  .size-option.disabled::after{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(-45deg, transparent 0 6px, var(--line) 6px 7px);}
+
+  .color-row{ display:flex; gap:10px; }
+  .color-option{ width:34px; height:34px; border-radius:50%; border:1px solid var(--line); cursor:pointer; position:relative; }
+  .color-option.active::after{ content:''; position:absolute; inset:-4px; border:1px solid var(--black); border-radius:50%; }
+
+  .qty-add-row{ display:flex; gap:12px; margin-top:26px; }
+  .qty-add-row .qty-stepper{ flex-shrink:0; padding:0 4px; }
+  .qty-add-row .btn{ flex:1; }
+
+  .pdp-info-copy{ font-size:14px; color:var(--grey); line-height:1.7; }
+  .spec-list{ font-size:13px; color:var(--grey); }
+  .spec-list li{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--line); }
+  .spec-list li span:first-child{ color:var(--ink); font-weight:500; }
+
+  .sticky-atc{
+    position:fixed; left:0; right:0; bottom:0; z-index:400; background:rgba(246,244,239,.97); backdrop-filter:blur(10px);
+    border-top:1px solid var(--line); padding:14px var(--gutter); display:flex; align-items:center; justify-content:space-between; gap:20px;
+    transform:translateY(100%); transition:transform var(--dur-m) var(--ease);
+  }
+  .sticky-atc.show{ transform:translateY(0); }
+  .sticky-atc .name{ font-size:13px; font-weight:600; }
+  .sticky-atc .price{ font-size:12px; color:var(--grey); }
+  .sticky-atc .btn{ padding:13px 30px; }
+
+  .pdp-tabs-bar{ display:flex; gap:34px; border-bottom:1px solid var(--line); margin-top:20px; }
+  .pdp-tab-btn{ padding:16px 0; font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; color:var(--grey); border-bottom:2px solid transparent; }
+  .pdp-tab-btn.active{ color:var(--black); border-color:var(--accent); }
+  .pdp-tab-panel{ display:none; padding:30px 0; font-size:14px; color:var(--grey); line-height:1.8; max-width:760px; }
+  .pdp-tab-panel.active{ display:block; }
+  .pdp-tab-panel ul{ list-style:disc; padding-left:20px; }
+  .pdp-tab-panel li{ margin-bottom:8px; }
+
+  .review-card{ border-top:1px solid var(--line); padding:24px 0; }
+  .review-card .stars{ margin-bottom:8px; display:block; }
+  .review-card h5{ font-size:13px; font-weight:600; margin-bottom:6px; text-transform:none; }
+  .review-card p{ font-size:13px; color:var(--grey); text-transform:none; letter-spacing:0; font-weight:400; }
+  .review-meta{ font-size:11px; color:var(--grey); margin-top:10px; display:block; }
+
+  @media (max-width: 900px){
+    .pdp-grid{ grid-template-columns:1fr; gap:30px; }
+    .pdp-gallery{ position:static; flex-direction:column-reverse; }
+    .gallery-thumbs{ flex-direction:row; width:auto; }
+    .gallery-thumb{ width:64px; flex-shrink:0; }
+    .pdp{ padding-top:110px; }
+  }
+</style>
+</head>
+<body class="light-page">
+<div class="preloader"><span class="preloader-mark">Q</span></div>
+
+<header class="nav scrolled" id="siteNav">
+  <a href="index.html" class="nav-logo" aria-label="QUADREX home"><span class="q-mark"></span> QUADREX</a>
+  <nav class="nav-menu hide-mobile" aria-label="Primary">
+    <a href="shop.html">Shop</a>
+    <a href="shop.html?filter=new">New Arrivals</a>
+    <a href="shop.html?filter=drop-001">Collections</a>
+    <a href="about.html">About</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="icon-btn hide-mobile" data-open-search aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <a href="#" class="icon-btn hide-mobile" aria-label="Account"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></a>
+        <button class="icon-btn" data-open-wishlist aria-label="Open wishlist">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg>
+      <span class="cart-count badge-count" id="wishlistCount">0</span>
+    </button>
+    <button class="icon-btn" data-open-cart aria-label="Open cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="cart-count badge-count show">3</span></button>
+    <button class="nav-burger icon-btn" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  </div>
+</header>
+
+<div class="mobile-menu" aria-hidden="true">
+  <ul>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="shop.html?filter=new">New Arrivals</a></li>
+    <li><a href="shop.html?filter=drop-001">Collections</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</div>
+
+<main class="pdp wrap">
+  <div class="pdp-grid">
+
+    <div class="pdp-gallery">
+      <div class="gallery-thumbs">
+        <div class="gallery-thumb active" data-tone="#111111"><div class="plate" style="background:#111"></div></div>
+        <div class="gallery-thumb" data-tone="#050505"><div class="plate" style="background:#050505"></div></div>
+        <div class="gallery-thumb" data-tone="#1c1c1c"><div class="plate" style="background:#1c1c1c"></div></div>
+        <div class="gallery-thumb" data-tone="#2a2a2a"><div class="plate" style="background:#2a2a2a"></div></div>
+      </div>
+      <div class="gallery-main">
+        <div class="plate" style="background:#111"></div>
+        <span class="q-ghost">Q</span>
+      </div>
+    </div>
+
+    <div class="pdp-info">
+      <a href="shop.html?cat=hoodies" class="breadcrumb">Hoodies / Drop 001</a>
+      <h1>HEAVYWEIGHT HOODIE — BLACK</h1>
+
+      <div class="pdp-price">₹3,990</div>
+      <a href="#reviews" class="pdp-reviews-link"><span class="stars">★★★★★</span> 4.8 (212 reviews)</a>
+
+      <div class="pdp-section">
+        <h4>COLOR — BLACK</h4>
+        <div class="color-row">
+          <button class="color-option active" style="background:#111"></button>
+          <button class="color-option" style="background:#C4BBAF"></button>
+        </div>
+      </div>
+
+      <div class="pdp-section">
+        <h4>SIZE <a href="#sizeguide" class="size-guide-link">Size Guide</a></h4>
+        <div class="size-row">
+          <button class="size-option">XS</button>
+          <button class="size-option active">S</button>
+          <button class="size-option">M</button>
+          <button class="size-option">L</button>
+          <button class="size-option">XL</button>
+          <button class="size-option disabled">XXL</button>
+        </div>
+      </div>
+
+      <div class="qty-add-row">
+        <div class="qty-stepper">
+          <button data-action="dec">−</button><span>1</span><button data-action="inc">+</button>
+        </div>
+        <button class="btn btn-solid quick-add" id="atcBtn">ADD TO CART — ₹3,990</button>
+      </div>
+
+      <p class="pdp-info-copy" style="margin-top:24px;">
+        Cut from 450 GSM heavyweight French terry with a drop-shoulder block for an oversized, structured silhouette. Ribbed cuffs and hem lock in shape wash after wash. Part of Drop 001 — engineered for the gym floor, the studio, and everywhere after.
+      </p>
+
+      <div class="pdp-tabs-bar">
+        <button class="pdp-tab-btn active" data-tab="material">Material</button>
+        <button class="pdp-tab-btn" data-tab="shipping">Shipping</button>
+        <button class="pdp-tab-btn" data-tab="returns">Returns</button>
+      </div>
+
+      <div class="pdp-tab-panel active" data-tab="material">
+        <ul class="spec-list">
+          <li><span>Fabric</span><span>450 GSM Heavyweight French Terry</span></li>
+          <li><span>Composition</span><span>100% Combed Cotton</span></li>
+          <li><span>Fit</span><span>Oversized, Drop Shoulder</span></li>
+          <li><span>Wash Care</span><span>Cold machine wash, inside out</span></li>
+          <li><span>Origin</span><span>Designed in India, ethically made</span></li>
+        </ul>
+      </div>
+      <div class="pdp-tab-panel" data-tab="shipping">
+        <p>Free shipping across India on orders above ₹4,999. Standard delivery in 3–5 business days, express delivery in 1–2 business days in metro cities. International shipping available at checkout for select regions.</p>
+      </div>
+      <div class="pdp-tab-panel" data-tab="returns">
+        <p>Easy 14-day returns on unworn items with tags attached. Exchanges are free. Refunds are processed to your original payment method within 5–7 business days of us receiving the return.</p>
+      </div>
+
+      <div id="sizeguide" class="pdp-section" style="margin-top:10px;">
+        <h4>SIZE GUIDE (IN)</h4>
+        <ul class="spec-list">
+          <li><span>S</span><span>Chest 40 · Length 27</span></li>
+          <li><span>M</span><span>Chest 42 · Length 28</span></li>
+          <li><span>L</span><span>Chest 44 · Length 29</span></li>
+          <li><span>XL</span><span>Chest 46 · Length 30</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <section id="reviews" class="pdp-section" style="max-width:760px;">
+    <div class="section-head" style="margin-bottom:10px;">
+      <h2 style="font-size:26px;">Reviews</h2>
+      <p class="desc" style="max-width:none;"><span class="stars">★★★★★</span> 4.8 out of 5 · 212 reviews</p>
+    </div>
+    <div class="review-card">
+      <span class="stars">★★★★★</span>
+      <h5>Fits exactly like the size chart said</h5>
+      <p>Ordered a size up for the oversized look and it's perfect. Fabric feels genuinely heavyweight, not the thin stuff most "streetwear" brands sell.</p>
+      <span class="review-meta">Rohan K. — Verified Buyer</span>
+    </div>
+    <div class="review-card">
+      <span class="stars">★★★★★</span>
+      <h5>Best hoodie I own</h5>
+      <p>Holds shape after multiple washes. Drop shoulder cut is clean. Worth the price.</p>
+      <span class="review-meta">Aditi S. — Verified Buyer</span>
+    </div>
+    <div class="review-card">
+      <span class="stars">★★★★☆</span>
+      <h5>Great quality, runs slightly large</h5>
+      <p>Beautiful hoodie, true heavyweight feel. If you're between sizes, size down.</p>
+      <span class="review-meta">Karan M. — Verified Buyer</span>
+    </div>
+  </section>
+
+  <section class="section-pad">
+    <div class="section-head reveal">
+      <h2>Complete<br>The Fit</h2>
+      <a href="shop.html" class="btn btn-ghost">VIEW ALL</a>
+    </div>
+    <div class="product-grid reveal">
+      <article class="product-card">
+        <a href="product.html?id=sweat-black" class="product-media">
+          <div class="media-block"><div class="card-media main plate" style="background:#101010"></div><div class="card-media alt plate" style="background:#000"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Heavyweight Sweatshirt — Black</h3><span class="price">₹2,790</span></div>
+      </article>
+      <article class="product-card">
+        <a href="product.html?id=tee-black" class="product-media">
+          <div class="media-block"><div class="card-media main plate" style="background:#0c0c0c"></div><div class="card-media alt plate" style="background:#000"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Oversized Tee — Black</h3><span class="price">₹1,690</span></div>
+      </article>
+      <article class="product-card">
+        <a href="product.html?id=hoodie-stone" class="product-media">
+          <div class="media-block"><div class="card-media main plate" style="background:#C4BBAF"></div><div class="card-media alt plate" style="background:#b3a99a"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px; color:rgba(0,0,0,.06)">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Heavyweight Hoodie — Stone</h3><span class="price">₹3,990</span></div>
+      </article>
+      <article class="product-card">
+        <a href="product.html?id=polo-olive" class="product-media">
+          <div class="media-block"><div class="card-media main plate" style="background:#556B2F"></div><div class="card-media alt plate" style="background:#495e28"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Pique Polo — Olive</h3><span class="price">₹2,290</span></div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<div class="sticky-atc" id="stickyAtc">
+  <div>
+    <div class="name">Heavyweight Hoodie — Black</div>
+    <div class="price">₹3,990 · Size S</div>
+  </div>
+  <button class="btn btn-solid quick-add">ADD TO CART</button>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><span class="q-mark"></span> QUADREX</a>
+        <p>Premium minimalist streetwear, engineered on heavyweight cotton for a generation that dresses with intention.</p>
+      </div>
+      <div class="footer-col"><h4>SHOP</h4><ul>
+        <li><a href="shop.html?cat=hoodies">Hoodies</a></li><li><a href="shop.html?cat=oversized">Oversized Tees</a></li>
+        <li><a href="shop.html?cat=polos">Polos</a></li><li><a href="shop.html?cat=sweatshirts">Sweatshirts</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>SUPPORT</h4><ul>
+        <li><a href="faq.html">FAQ</a></li><li><a href="faq.html#shipping">Shipping</a></li>
+        <li><a href="faq.html#returns">Returns</a></li><li><a href="contact.html">Contact Us</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>COMPANY</h4><ul>
+        <li><a href="about.html">Our Story</a></li><li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li><li><a href="#">Store Locator</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-wordmark">QUADREX</div>
+    <div class="footer-bottom">
+      <p>© 2026 QUADREX. All rights reserved. &nbsp;·&nbsp; <a href="privacy.html" style="text-decoration:underline;">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="text-decoration:underline;">Terms</a></p>
+      <div class="footer-socials"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">YouTube</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay" data-close-cart></div>
+<aside class="cart-drawer" aria-label="Shopping cart">
+  <div class="cart-head"><h3>YOUR BAG</h3><button data-close-cart aria-label="Close cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg></button></div>
+  <div class="cart-progress"><p>Add more for free shipping</p><div class="cart-progress-bar"><span></span></div></div>
+  <div class="cart-items"></div>
+  <div class="cart-foot">
+    <div class="subtotal"><span>Subtotal</span><span class="val">₹0</span></div>
+    <a href="cart.html" class="btn btn-solid">VIEW BAG & CHECKOUT</a>
+    <p class="cart-note">Shipping and taxes calculated at checkout.</p>
+  </div>
+</aside>
+
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay">
+  <button class="search-close" data-close-search aria-label="Close search">&times;</button>
+  <div class="search-overlay-inner">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search the collection..." autocomplete="off">
+    <div class="search-suggestions">
+      <span>Popular:</span>
+      <button class="search-chip" data-q="hoodie">Hoodie</button>
+      <button class="search-chip" data-q="tee">Tee</button>
+      <button class="search-chip" data-q="polo">Polo</button>
+      <button class="search-chip" data-q="sweatshirt">Sweatshirt</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- WISHLIST DRAWER -->
+<div class="wishlist-overlay" data-close-wishlist></div>
+<aside class="wishlist-drawer" aria-label="Wishlist">
+  <div class="cart-head">
+    <h3>WISHLIST</h3>
+    <button data-close-wishlist aria-label="Close wishlist">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+    </button>
+  </div>
+  <div class="wishlist-items" id="wishlistItems"></div>
+  <div class="cart-foot">
+    <p class="cart-note">Saved to this device. Sign in to sync across devices.</p>
+  </div>
+</aside>
+
+<script src="js/script.js"></script>
+<script>
+  const infoBlock = document.querySelector('.pdp-info');
+  const sticky = document.getElementById('stickyAtc');
+  window.addEventListener('scroll', () => {
+    const rect = infoBlock.getBoundingClientRect();
+    sticky.classList.toggle('show', rect.bottom < 0);
+  }, { passive:true });
+</script>
+</body>
+</html>

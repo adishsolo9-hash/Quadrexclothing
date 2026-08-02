@@ -1,0 +1,8 @@
+No product photography exists yet — every visual in this build is a CSS color
+block by design (see the .media-block / .plate pattern in css/style.css), so
+the site never looks broken pre-photoshoot.
+
+Drop real product photography here once available, e.g.:
+  hoodie-black-1.jpg, hoodie-black-2.jpg, tee-white-1.jpg, ...
+
+Then swap the .plate <div> in each product card / gallery for an <img src="assets/images/...">.

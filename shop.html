@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop All — QUADREX</title>
+<meta name="description" content="Shop the full QUADREX range — hoodies, oversized tees, polos and sweatshirts in heavyweight cotton.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .plp-banner{ background:var(--black); color:var(--warm-white); padding:170px 0 60px; }
+  .plp-banner .eyebrow{color:var(--stone);}
+  .plp-banner h1{font-size:clamp(40px,7vw,84px); margin-top:14px;}
+  .plp-toolbar{
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding:22px 0; border-bottom:1px solid var(--line); flex-wrap:wrap;
+  }
+  .plp-count{font-size:12px; color:var(--grey);}
+  .plp-toolbar-right{display:flex; align-items:center; gap:18px;}
+  .filter-toggle-btn{display:flex; align-items:center; gap:8px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:600;}
+  select.sort-select{
+    border:1px solid var(--line); background:transparent; padding:10px 32px 10px 14px; font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-family:var(--font-body);
+    appearance:none; -webkit-appearance:none; -moz-appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23000' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center;
+  }
+  select.sort-select:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .price-range input[type="range"]{
+    appearance:none; -webkit-appearance:none; -moz-appearance:none;
+    height:2px; background:var(--line); outline:none; cursor:pointer; flex:1;
+  }
+  .price-range input[type="range"]::-webkit-slider-thumb{
+    appearance:none; -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+    background:var(--black); border:2px solid var(--warm-white); box-shadow:0 0 0 1px var(--black);
+    cursor:pointer; transition:transform .18s ease;
+  }
+  .price-range input[type="range"]::-webkit-slider-thumb:hover{ transform:scale(1.15); }
+  .price-range input[type="range"]::-moz-range-thumb{
+    width:14px; height:14px; border-radius:50%; background:var(--black); border:2px solid var(--warm-white);
+    box-shadow:0 0 0 1px var(--black); cursor:pointer;
+  }
+  .price-range input[type="range"]::-moz-range-track{ height:2px; background:var(--line); border:none; }
+  .plp-layout{display:grid; grid-template-columns:260px 1fr; gap:48px; padding:40px 0 120px;}
+  .filter-panel{ align-self:start; position:sticky; top:120px; }
+  .filter-group{padding:22px 0; border-bottom:1px solid var(--line);}
+  .filter-group:first-child{padding-top:0;}
+  .filter-group h4{font-size:11px; letter-spacing:.14em; margin-bottom:16px; font-weight:600;}
+  .filter-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .filter-chip{
+    border:1px solid var(--line); padding:8px 14px; font-size:12px; border-radius:20px;
+    transition:all var(--dur-s) var(--ease);
+  }
+  .filter-chip.active{background:var(--black); color:var(--warm-white); border-color:var(--black);}
+  .filter-color-row{display:flex; flex-wrap:wrap; gap:10px;}
+  .filter-color{width:26px; height:26px; border-radius:50%; border:1px solid var(--line); position:relative; cursor:pointer;}
+  .filter-color.active::after{content:''; position:absolute; inset:-4px; border:1px solid var(--black); border-radius:50%;}
+  .price-range{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--grey);}
+  .price-range input{flex:1;}
+  @media (max-width: 1024px){
+    .plp-layout{grid-template-columns:1fr;}
+    .filter-panel{
+      position:fixed; inset:0 0 0 auto; width:min(340px,86%); background:var(--paper); z-index:850;
+      padding:26px var(--gutter); transform:translateX(100%); transition:transform var(--dur-m) var(--ease);
+      overflow-y:auto;
+    }
+    .filter-panel.open{transform:translateX(0);}
+  }
+</style>
+</head>
+<body class="light-page">
+<div class="preloader"><span class="preloader-mark">Q</span></div>
+
+<!-- ============================= NAV ============================= -->
+<header class="nav" id="siteNav">
+  <a href="index.html" class="nav-logo" aria-label="QUADREX home"><span class="q-mark"></span> QUADREX</a>
+  <nav class="nav-menu hide-mobile" aria-label="Primary">
+    <a href="shop.html">Shop</a>
+    <a href="shop.html?filter=new">New Arrivals</a>
+    <a href="shop.html?filter=drop-001">Collections</a>
+    <a href="about.html">About</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="icon-btn hide-mobile" data-open-search aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <a href="#" class="icon-btn hide-mobile" aria-label="Account"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></a>
+        <button class="icon-btn" data-open-wishlist aria-label="Open wishlist">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg>
+      <span class="cart-count badge-count" id="wishlistCount">0</span>
+    </button>
+    <button class="icon-btn" data-open-cart aria-label="Open cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="cart-count badge-count show">3</span></button>
+    <button class="nav-burger icon-btn" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  </div>
+</header>
+
+<div class="mobile-menu" aria-hidden="true">
+  <ul>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="shop.html?filter=new">New Arrivals</a></li>
+    <li><a href="shop.html?filter=drop-001">Collections</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</div>
+
+<!-- ============================= BANNER ============================= -->
+<section class="plp-banner">
+  <div class="wrap">
+    <p class="eyebrow">DROP 001</p>
+    <h1>SHOP ALL</h1>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <div class="plp-toolbar">
+    <p class="plp-count">Showing 8 of 8 products</p>
+    <div class="plp-toolbar-right">
+      <button class="filter-toggle-btn show-mobile" data-filter-toggle>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="1.6" fill="currentColor"/><circle cx="15" cy="12" r="1.6" fill="currentColor"/><circle cx="7" cy="18" r="1.6" fill="currentColor"/></svg>
+        Filter & Sort
+      </button>
+      <select class="sort-select hide-mobile" aria-label="Sort products">
+        <option>Featured</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+        <option>Newest</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="plp-layout">
+
+    <!-- FILTER PANEL -->
+    <aside class="filter-panel">
+      <div class="filter-group">
+        <h4>CATEGORY</h4>
+        <div class="filter-chip-row">
+          <button class="filter-chip active">All</button>
+          <button class="filter-chip">Hoodies</button>
+          <button class="filter-chip">Oversized Tees</button>
+          <button class="filter-chip">Polos</button>
+          <button class="filter-chip">Sweatshirts</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>SIZE</h4>
+        <div class="filter-chip-row">
+          <button class="filter-chip">XS</button>
+          <button class="filter-chip">S</button>
+          <button class="filter-chip">M</button>
+          <button class="filter-chip">L</button>
+          <button class="filter-chip">XL</button>
+          <button class="filter-chip">XXL</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>COLOR</h4>
+        <div class="filter-color-row">
+          <button class="filter-color active" style="background:#000" aria-label="Black"></button>
+          <button class="filter-color" style="background:#F6F4EF; border-color:#ccc" aria-label="Warm White"></button>
+          <button class="filter-color" style="background:#C4BBAF" aria-label="Stone"></button>
+          <button class="filter-color" style="background:#909090" aria-label="Grey"></button>
+          <button class="filter-color" style="background:#556B2F" aria-label="Olive"></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>PRICE</h4>
+        <div class="price-range">
+          <span>₹1,000</span>
+          <input type="range" min="1000" max="5000" value="5000">
+          <span>₹5,000</span>
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>COLLECTION</h4>
+        <div class="filter-chip-row">
+          <button class="filter-chip">Drop 001</button>
+          <button class="filter-chip">Gym Collection</button>
+          <button class="filter-chip">Core Collection</button>
+          <button class="filter-chip">Winter Collection</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PRODUCT GRID -->
+    <div class="product-grid" id="productGrid">
+
+      <article class="product-card">
+        <a href="product.html?id=hoodie-black" class="product-media">
+          <span class="product-tag">Bestseller</span>
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#111"></div><div class="card-media alt plate" style="background:#050505"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Heavyweight Hoodie — Black</h3><span class="price">₹3,990</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=hoodie-stone" class="product-media">
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#C4BBAF"></div><div class="card-media alt plate" style="background:#b3a99a"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px; color:rgba(0,0,0,.06)">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Heavyweight Hoodie — Stone</h3><span class="price">₹3,990</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=tee-white" class="product-media">
+          <span class="product-tag">New</span>
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#e9e6df"></div><div class="card-media alt plate" style="background:#d8d4c9"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px; color:rgba(0,0,0,.05)">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Oversized Tee — White</h3><span class="price">₹1,690</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=tee-black" class="product-media">
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#0c0c0c"></div><div class="card-media alt plate" style="background:#000"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Oversized Tee — Black</h3><span class="price">₹1,690</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=polo-white" class="product-media">
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#efece5"></div><div class="card-media alt plate" style="background:#e2ddd2"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px; color:rgba(0,0,0,.05)">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Pique Polo — White</h3><span class="price">₹2,290</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=polo-olive" class="product-media">
+          <span class="product-tag">New</span>
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#556B2F"></div><div class="card-media alt plate" style="background:#495e28"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Pique Polo — Olive</h3><span class="price">₹2,290</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=sweat-grey" class="product-media">
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#909090"></div><div class="card-media alt plate" style="background:#7d7d7d"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Heavyweight Sweatshirt — Grey</h3><span class="price">₹2,790</span></div>
+      </article>
+
+      <article class="product-card">
+        <a href="product.html?id=sweat-black" class="product-media">
+          <button class="wishlist-btn" aria-label="Wishlist"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><path d="M12 21s-7.5-4.8-10-9.3C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.6C14.3 5.2 15.8 4 18 4c4 0 5.5 4 4 7.7C19.5 16.2 12 21 12 21Z"/></svg></button>
+          <div class="media-block"><div class="card-media main plate" style="background:#101010"></div><div class="card-media alt plate" style="background:#000"></div><span class="q-ghost" style="font-size:140px; bottom:-15px; right:-10px;">Q</span><div class="grain"></div></div>
+          <button class="quick-add">Quick Add</button>
+        </a>
+        <div class="product-info"><h3>Heavyweight Sweatshirt — Black</h3><span class="price">₹2,790</span></div>
+      </article>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo"><span class="q-mark"></span> QUADREX</a>
+        <p>Premium minimalist streetwear, engineered on heavyweight cotton for a generation that dresses with intention.</p>
+      </div>
+      <div class="footer-col"><h4>SHOP</h4><ul>
+        <li><a href="shop.html?cat=hoodies">Hoodies</a></li>
+        <li><a href="shop.html?cat=oversized">Oversized Tees</a></li>
+        <li><a href="shop.html?cat=polos">Polos</a></li>
+        <li><a href="shop.html?cat=sweatshirts">Sweatshirts</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>SUPPORT</h4><ul>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="faq.html#shipping">Shipping</a></li>
+        <li><a href="faq.html#returns">Returns</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>COMPANY</h4><ul>
+        <li><a href="about.html">Our Story</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Store Locator</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-wordmark">QUADREX</div>
+    <div class="footer-bottom">
+      <p>© 2026 QUADREX. All rights reserved. &nbsp;·&nbsp; <a href="privacy.html" style="text-decoration:underline;">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="text-decoration:underline;">Terms</a></p>
+      <div class="footer-socials"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">YouTube</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay" data-close-cart></div>
+<aside class="cart-drawer" aria-label="Shopping cart">
+  <div class="cart-head"><h3>YOUR BAG</h3><button data-close-cart aria-label="Close cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg></button></div>
+  <div class="cart-progress"><p>Add more for free shipping</p><div class="cart-progress-bar"><span></span></div></div>
+  <div class="cart-items"></div>
+  <div class="cart-foot">
+    <div class="subtotal"><span>Subtotal</span><span class="val">₹0</span></div>
+    <a href="cart.html" class="btn btn-solid">VIEW BAG & CHECKOUT</a>
+    <p class="cart-note">Shipping and taxes calculated at checkout.</p>
+  </div>
+</aside>
+
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay">
+  <button class="search-close" data-close-search aria-label="Close search">&times;</button>
+  <div class="search-overlay-inner">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search the collection..." autocomplete="off">
+    <div class="search-suggestions">
+      <span>Popular:</span>
+      <button class="search-chip" data-q="hoodie">Hoodie</button>
+      <button class="search-chip" data-q="tee">Tee</button>
+      <button class="search-chip" data-q="polo">Polo</button>
+      <button class="search-chip" data-q="sweatshirt">Sweatshirt</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- WISHLIST DRAWER -->
+<div class="wishlist-overlay" data-close-wishlist></div>
+<aside class="wishlist-drawer" aria-label="Wishlist">
+  <div class="cart-head">
+    <h3>WISHLIST</h3>
+    <button data-close-wishlist aria-label="Close wishlist">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+    </button>
+  </div>
+  <div class="wishlist-items" id="wishlistItems"></div>
+  <div class="cart-foot">
+    <p class="cart-note">Saved to this device. Sign in to sync across devices.</p>
+  </div>
+</aside>
+
+<script src="js/script.js"></script>
+</body>
+</html>
